@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" 
+						layout="absolute" 
+						height="600" 
+						width="800" 
+						backgroundColor="#000000"
+						creationComplete="init()">
+		<mx:Script>
+	    <![CDATA[
+	    	
+			import flash.events.Event;
+			import flash.events.KeyboardEvent;
+			import flash.display.Graphics;
+			import flash.display.Sprite;
+			import mx.core.UIComponent;
+			import mx.events.ItemClickEvent;
+			import flash.display.Loader;
+		    private var l:Level = new Level();
+			private var loader:Loader = new Loader();
+			private function init():void {
+				       	
+	   			var baggrund:URLRequest = new URLRequest("Background.png");
+	   			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, addBackground);
+	   			loader.load(baggrund);
+
+	   			l.addEventListener("ScoreUpdate", updateScore);
+	   			l.addEventListener("LevelCleared", clearedLevelOn);
+	   			l.addEventListener("NewLevel", clearedLevelOff);
+	   			l.p.addEventListener("livesUpdated", updateLives, false, 0, true);
+	   		}
+	   			   		
+			private function addBackground(e:Event):void{
+	   			levelstage.rawChildren.addChild(loader);
+				levelstage.rawChildren.addChild(l); 		
+			}
+				   		
+	   		private function updateScore(e:Event):void{
+	   		scoreLabel.text = l.score
+	   		}
+	   		
+	   		private function clearedLevelOn(e:Event):void{
+	   		levelCleared.visible = true;
+	   		}
+	   		
+	   		private function clearedLevelOff(e:Event):void{
+	   		levelCleared.visible = false;
+	   		levelLabel.text ="LEVEL " + l.currentLevel;
+	   		}
+	   		
+	   		private function updateLives(e:Event):void{
+	   		livesLabel.text = "LIVES LEFT: " + l.p.lives;
+	   		}
+	    ]]>
+	</mx:Script>
+
+	
+	
+<mx:Canvas x="20" y="60" width="600" height="520" borderColor="#FF0000" id="levelstage" borderThickness="5" addedToStage="stage.addEventListener(KeyboardEvent.KEY_DOWN, l.p._controller.keyPressed); stage.addEventListener(KeyboardEvent.KEY_UP, l.p._controller.keyReleased);" borderStyle="solid">
+	<mx:Label y="150" text="!!!LEVEL CLEARED!!!" id="levelCleared" fontFamily="Georgia" fontSize="50" color="#FFFFFF" fontWeight="bold" x="10" visible="false"/>
+	</mx:Canvas>
+<mx:Label x="200" y="20" text="SCORE: 0" height="20" width="150" visible="true" id="scoreLabel" fontSize="15" color="#FFFFFF"/>	
+	<mx:Label x="20" y="20" text="LEVEL 1" height="20" width="150" visible="true" id="levelLabel" fontSize="15" color="#FFFFFF"/>
+	<mx:Label x="400" y="20" text="LIVES LEFT: 3" height="20" width="150" visible="true" id="livesLabel" fontSize="15" color="#FFFFFF"/>
+</mx:WindowedApplication>
